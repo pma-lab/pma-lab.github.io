@@ -1,361 +1,324 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P&MA 人與多AI共創實驗室</title>
-    <meta name="description" content="P&MA (Person and Multi-AI) 是一種人與多AI共創協作方法論，提供高效運用多個AI模型提升內容品質、擴展創作邊界及強化風險管理的實踐指南。">
-    <meta name="keywords" content="P&MA, 人與多AI, AI共創, AI協作, 方法論, AIC, ATT, AI模型, 協作指南, 內容創作, AI生成內容">
-    <style>
-        /* Base styles */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            font-family: 'Noto Sans CJK TC', 'Microsoft JhengHei', Arial, sans-serif;
-            line-height: 1.8;
-            color: #333;
-            /* 將 body 的 overflow: hidden 移除，讓需要滾動的元素自己處理 */
-            /* overflow: hidden; */
-            box-sizing: border-box; /* 確保 padding 不增加寬度 */
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P&MA 人與多AI共創實驗室</title>
+    <meta name="description" content="P&MA (Person and Multi-AI) 是一種人與多AI共創協作方法論，提供高效運用多個AI模型提升內容品質、擴展創作邊界及強化風險管理的實踐指南。">
+    <meta name="keywords" content="P&MA, 人與多AI, AI共創, AI協作, 方法論, AIC, ATT, AI模型, 協作指南, 內容創作, AI生成內容">
+    <style>
+        /* Base styles */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans CJK TC', 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            /* 將 body 的 overflow: hidden 移除，讓需要滾動的元素自己處理 */
+            /* overflow: hidden; */ 
+            box-sizing: border-box; /* 確保 padding 不增加寬度 */
+        }
 
-        body {
-            display: flex;
-            flex-direction: row; /* Desktop: sidebar and content side-by-side */
-            background-color: #f4f7f6;
-            width: 100vw; /* 確保佔滿整個視窗寬度 */
-            height: 100vh; /* 確保佔滿整個視窗高度 */
-        }
+        body {
+            display: flex;
+            flex-direction: row; /* Desktop: sidebar and content side-by-side */
+            background-color: #f4f7f6;
+            width: 100vw; /* 確保佔滿整個視窗寬度 */
+            height: 100vh; /* 確保佔滿整個視窗高度 */
+        }
 
-        /* Styles for the sidebar (menu) */
-        .sidebar {
-            width: 280px;
-            background-color: #ecf0f1;
-            color: #333;
-            padding: 20px 15px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            overflow-y: auto;
-            flex-shrink: 0; /* Prevents sidebar from shrinking */
-            position: relative;
-            z-index: 10;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar ul li {
-            margin-bottom: 5px;
-        }
-        .sidebar ul ul {
-            padding-left: 15px;
-            margin-top: 5px;
-            border-left: 2px solid #ccc;
-            /* Add transition for smooth collapse/expand */
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            overflow: hidden;
-        }
-        /* 預設收合狀態，但第一個大類不收合 */
-        .sidebar ul li:not(:first-child) > ul {
-            max-height: 0;
-            opacity: 0;
-        }
-        /* 展開狀態 */
-        .sidebar ul li > .section-title.active + ul {
-            max-height: 500px; /* 足夠大的值 */
-            opacity: 1;
-        }
-        .sidebar a {
-            display: block;
-            padding: 0px 10px;
-            text-decoration: none;
-            color: #34495e; /* 統一顏色 */
-            font-weight: bold;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            border-radius: 4px;
-        }
-        .sidebar a:hover {
-            background-color: #dce4e6;
-            color: #2c3e50;
-        }
-        .sidebar .section-title {
-            font-size: 1.1em;
-            color: #2c3e50;
-            margin-top: 1.5em;
-            margin-bottom: 0.5em;
-            padding-left: 5px;
-            border-left: 4px solid #3498db;
-            /* Make title clickable and add indicator */
-            cursor: pointer;
-            position: relative;
-            user-select: none; /* Prevent text selection */
-            padding-right: 25px; /* Space for the arrow */
-        }
-        /* Arrow for collapse/expand state */
-        .sidebar .section-title::after {
-            content: '▼'; /* Down arrow */
-            font-size: 0.8em;
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            transition: transform 0.3s ease;
-        }
-        /* Collapsed state: rotate arrow */
-        .sidebar .section-title:not(.active)::after {
-            transform: translateY(-50%) rotate(-90deg);
-        }
-        .sidebar .legal-section {
-            margin-top: 30px;
-            font-size: 0.9em;
-            border-top: 1px solid #ccc;
-            padding-top: 15px;
-        }
-        .sidebar .legal-section .section-title {
-            border-left: none;
-            padding-left: 0;
-            margin-top: 0;
-            margin-bottom: 0.5em;
-        }
-        /* Remove arrow from legal-section title, which is not collapsible */
-        .sidebar .legal-section .section-title::after {
-            content: none;
-        }
+        /* Styles for the sidebar (menu) */
+        .sidebar {
+            width: 280px;
+            background-color: #ecf0f1;
+            color: #333;
+            padding: 20px 15px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            flex-shrink: 0; /* Prevents sidebar from shrinking */
+            position: relative;
+            z-index: 10;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 5px;
+        }
+        .sidebar ul ul {
+            padding-left: 15px;
+            margin-top: 5px;
+            border-left: 2px solid #ccc;
+        }
+        .sidebar a {
+            display: block;
+            padding: 0px 10px;
+            text-decoration: none;
+            color: #34495e; /* 統一顏色 */
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
+        }
+        .sidebar a:hover {
+            background-color: #dce4e6;
+            color: #2c3e50;
+        }
+        .sidebar .section-title {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            padding-left: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .sidebar .legal-section {
+            margin-top: 30px;
+            font-size: 0.9em;
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+        }
+        .sidebar .legal-section .section-title {
+            border-left: none;
+            padding-left: 0;
+            margin-top: 0;
+            margin-bottom: 0.5em;
+        }
 
-        /* Styles for the content area (iframe wrapper) */
-        .content-area {
-            flex-grow: 1; /* Allows content area to take remaining space */
-            background-color: #ffffff;
-            display: flex; /* Using flexbox for content area to contain iframe */
-            flex-direction: column;
-            /* 移除 content-area 的 overflow: hidden，讓 iframe 自己處理滾動 */
-            /* overflow: hidden; */
-            /* 桌面版寬度：確保佔滿剩餘空間，而不是固定計算 */
-            width: calc(100vw - 280px); /* 桌面版寬度 = 總寬度 - sidebar寬度 */
-            height: 100vh; /* 桌面版高度 = 總高度 */
-        }
-        .content-area iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-            overflow-y: auto; /* Allow iframe content to scroll itself */
-            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
-        }
+        /* Styles for the content area (iframe wrapper) */
+        .content-area {
+            flex-grow: 1; /* Allows content area to take remaining space */
+            background-color: #ffffff;
+            display: flex; /* Using flexbox for content area to contain iframe */
+            flex-direction: column;
+            /* 移除 content-area 的 overflow: hidden，讓 iframe 自己處理滾動 */
+            /* overflow: hidden; */ 
+            /* 桌面版寬度：確保佔滿剩餘空間，而不是固定計算 */
+            width: calc(100vw - 280px); /* 桌面版寬度 = 總寬度 - sidebar寬度 */
+            height: 100vh; /* 桌面版高度 = 總高度 */
+        }
+        .content-area iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            overflow-y: auto; /* Allow iframe content to scroll itself */
+            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+        }
 
-        /* Burger menu for mobile */
-        .burger-menu {
-            display: none; /* Hidden by default for desktop */
-            cursor: pointer;
-            padding: 10px 15px;
-            background-color: #2c3e50;
-            color: white;
-            font-size: 1.8em;
-            width: 100%;
-            box-sizing: border-box;
-            align-items: center;
-            justify-content: flex-start;
-            height: 50px; /* Consistent height for mobile header */
-            position: sticky; /* 確保 z-index 在 sidebar 之上 */
-            top: 0;
-            z-index: 1001;
-        }
-        .burger-menu .icon {
-            font-size: 1.2em;
-            margin-right: 10px;
-            vertical-align: middle;
-            line-height: 1;
-        }
-        .burger-menu .title {
-            font-size: 0.8em;
-            font-weight: bold;
-            vertical-align: middle;
-            line-height: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: calc(100% - 60px); /* Adjust max-width to prevent overflow */
-        }
+        /* Burger menu for mobile */
+        .burger-menu {
+            display: none; /* Hidden by default for desktop */
+            cursor: pointer;
+            padding: 10px 15px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 1.8em;
+            width: 100%;
+            box-sizing: border-box;
+            align-items: center;
+            justify-content: flex-start;
+            height: 50px; /* Consistent height for mobile header */
+            position: sticky; /* 確保 z-index 在 sidebar 之上 */
+            top: 0;
+            z-index: 1001; 
+        }
+        .burger-menu .icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+            vertical-align: middle;
+            line-height: 1;
+        }
+        .burger-menu .title {
+            font-size: 0.8em;
+            font-weight: bold;
+            vertical-align: middle;
+            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(100% - 60px); /* Adjust max-width to prevent overflow */
+        }
 
-        /* Overlay for mobile menu */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
+        /* Overlay for mobile menu */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
 
-        /* Media Queries for Responsiveness */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column; /* Mobile: burger menu, then content */
-                /* 確保 body 在手機版可以滾動，避免內容被裁切 */
-                overflow-y: auto;
-                height: auto; /* 高度不再固定為 100vh，讓內容決定高度 */
-            }
-            .burger-menu {
-                display: flex; /* Show burger menu on mobile */
-                /* 手機版 header 固定在頂部 */
-                position: sticky;
-                top: 0;
-            }
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column; /* Mobile: burger menu, then content */
+                /* 確保 body 在手機版可以滾動，避免內容被裁切 */
+                overflow-y: auto; 
+                height: auto; /* 高度不再固定為 100vh，讓內容決定高度 */
+            }
+            .burger-menu {
+                display: flex; /* Show burger menu on mobile */
+                /* 手機版 header 固定在頂部 */
+                position: sticky; 
+                top: 0;
+            }
 
-            .sidebar {
-                position: fixed;
-                top: 0; /* 修正為從視窗頂部開始 */
-                left: -350px; /* 老闆指定的神奇數字，多留一點空間，防止內容溢出被裁切 */
-                height: 100%;
-                width: 280px;
-                box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-                transition: left 0.3s ease-in-out;
-                z-index: 1000;
-                padding-top: 60px; /* Account for burger menu height */
-            }
-            .sidebar.active {
-                left: 0; /* Show sidebar when active */
-            }
+            .sidebar {
+                position: fixed;
+                top: 0; /* 修正為從視窗頂部開始 */
+                left: -350px; /* 老闆指定的神奇數字，多留一點空間，防止內容溢出被裁切 */
+                height: 100%;
+                width: 280px;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+                transition: left 0.3s ease-in-out;
+                z-index: 1000;
+                padding-top: 60px; /* Account for burger menu height */
+            }
+            .sidebar.active {
+                left: 0; /* Show sidebar when active */
+            }
 
-            .overlay.active {
-                display: block;
-            }
+            .overlay.active {
+                display: block;
+            }
 
-            .content-area {
-                width: 100vw; /* On mobile, content area takes full width */
-                /* 讓 content-area 的高度由內容決定，不再強行計算 */
-                height: auto;
-                /* 確保 content-area 內部的 iframe 內容不會溢出 */
-                overflow-x: hidden;
-            }
+            .content-area {
+                width: 100vw; /* On mobile, content area takes full width */
+                /* 讓 content-area 的高度由內容決定，不再強行計算 */
+                height: auto; 
+                /* 確保 content-area 內部的 iframe 內容不會溢出 */
+                overflow-x: hidden; 
+            }
 
-            /* 手機版 iframe 的高度需要動態調整 */
-            .content-area iframe {
-                /* 移除 iframe 的固定 height: 100%，讓它根據內容自適應，或由 JS 處理 */
-                height: calc(100vh - 50px); /* 初步嘗試，讓 iframe 高度為視窗高度減去 burger menu 高度 */
-            }
-        }
-    </style>
+            /* 手機版 iframe 的高度需要動態調整 */
+            .content-area iframe {
+                /* 移除 iframe 的固定 height: 100%，讓它根據內容自適應，或由 JS 處理 */
+                height: calc(100vh - 50px); /* 初步嘗試，讓 iframe 高度為視窗高度減去 burger menu 高度 */
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <div class="burger-menu" id="burgerMenu" onclick="toggleSidebar()">
-        <span class="icon">&#9776;</span>
-        <span class="title">P&MA 共創協作</span>
-    </div>
+    <div class="burger-menu" id="burgerMenu" onclick="toggleSidebar()">
+        <span class="icon">&#9776;</span>
+        <span class="title">P&MA 共創協作</span>
+    </div>
 
-    <div class="sidebar" id="sidebar">
-        <ul>
-            <li>
-                <div class="section-title active">P&MA 方法論 (主專區)</div>
-                <ul>
-                    <li><a href="pma-method/pma-Introduction.html" target="contentFrame" onclick="handleLinkClick()">方法論導讀</a></li>
-                    <li><a href="pma-method/pma-content.html" target="contentFrame" onclick="handleLinkClick()">方法論本文</a></li>
-                    <li><a href="pma-method/pma-glossary.html" target="contentFrame" onclick="handleLinkClick()">名詞解釋</a></li>
-                    <li><a href="pma-method/pma-changelog.html" target="contentFrame" onclick="handleLinkClick()">版本紀錄</a></li>
-                    <li><a href="pma-method/pma-faq.html" target="contentFrame" onclick="handleLinkClick()">常見問題</a></li>
-                </ul>
-            </li>
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><div class="section-title">P&MA 方法論 (主專區)</div>
+                <ul>
+                    <li><a href="pma-method/pma-Introduction.html" target="contentFrame" onclick="handleLinkClick()">方法論導讀</a></li>
+                    <li><a href="pma-method/pma-content.html" target="contentFrame" onclick="handleLinkClick()">方法論本文</a></li>
+                    <li><a href="pma-method/pma-glossary.html" target="contentFrame" onclick="handleLinkClick()">名詞解釋</a></li>
+                    <li><a href="pma-method/pma-changelog.html" target="contentFrame" onclick="handleLinkClick()">版本紀錄</a></li>
+                    <li><a href="pma-method/pma-faq.html" target="contentFrame" onclick="handleLinkClick()">常見問題</a></li>
+                </ul>
+            </li>
 
-            <li>
-                <div class="section-title">實驗案例</div>
-                <ul>
-                    <li><a href="pma-method/cases/case_01.html" target="contentFrame" onclick="handleLinkClick()">#01 |【網站建置】P&MA 共創實驗室</a></li>
-                    <li><a href="pma-method/cases/case_02.html" target="contentFrame" onclick="handleLinkClick()">#02 |【書籍創作】就決定是你了!!幹話風 AI(監修中)</a></li>
-                    <li><a href="pma-method/cases/case_03.html" target="contentFrame" onclick="handleLinkClick()">#03 |【粉專經營】AI 共創導演工作坊</a></li>
-                </ul>
-            </li>
+            <li><div class="section-title">實驗案例</div>
+                <ul>
+                    <li><a href="pma-method/cases/case_01.html" target="contentFrame" onclick="handleLinkClick()">#01 |【網站建置】P&MA 共創實驗室</a></li>
+                    <li><a href="pma-method/cases/case_02.html" target="contentFrame" onclick="handleLinkClick()">#02 |【書籍創作】就決定是你了!!幹話風 AI(監修中)</a></li>
+                    <li><a href="pma-method/cases/case_03.html" target="contentFrame" onclick="handleLinkClick()">#03 |【粉專經營】AI 共創導演工作坊</a></li>
+                </ul>
+            </li>
 
-            <li>
-                <div class="section-title">實驗室全貌</div>
-                <ul>
-                    <li><a href="pma-method/lab-origin.html" target="contentFrame" onclick="handleLinkClick()">計畫源起｜發展歷程</a></li>
-                    <li><a href="pma-method/lab-process.html" target="contentFrame" onclick="handleLinkClick()">運作流程｜核心機制</a></li>
-                    <li><a href="pma-method/lab-team.html" target="contentFrame" onclick="handleLinkClick()">團隊介紹｜角色分工</a></li>
-                    <li><a href="pma-method/lab-future.html" target="contentFrame" onclick="handleLinkClick()">未來願景｜發展藍圖</a></li>
-                    <li><a href="pma-method/contact.html" target="contentFrame" onclick="handleLinkClick()">意見交流｜共創合作</a></li>
-                </ul>
-            </li>
-        </ul>
+            <li><div class="section-title">實驗室全貌</div>
+                <ul>
+                    <li><a href="pma-method/lab-origin.html" target="contentFrame" onclick="handleLinkClick()">計畫源起｜發展歷程</a></li>
+                    <li><a href="pma-method/lab-process.html" target="contentFrame" onclick="handleLinkClick()">運作流程｜核心機制</a></li>
+                    <li><a href="pma-method/lab-team.html" target="contentFrame" onclick="handleLinkClick()">團隊介紹｜角色分工</a></li>
+                    <li><a href="pma-method/lab-future.html" target="contentFrame" onclick="handleLinkClick()">未來願景｜發展藍圖</a></li>
+                    <li><a href="pma-method/contact.html" target="contentFrame" onclick="handleLinkClick()">意見交流｜共創合作</a></li>
+                </ul>
+            </li>
+<!--
+            <li><div class="section-title">應用與洞察 (短篇文／精華)</div>
+                <ul>
+                    <li><a href="pma-method/under_construction.html" target="contentFrame" onclick="handleLinkClick()">AI 職能對照／未來轉型文章</a></li>
+                    <li><a href="pma-method/under_construction.html" target="contentFrame" onclick="handleLinkClick()">精華對話重演／副本摘要</a></li>
+                    <li><a href="pma-method/under_construction.html" target="contentFrame" onclick="handleLinkClick()">未來分析／社群討論</a></li>
+                </ul>
+            </li>
+            <li><a href="pma-method/under_construction.html" target="contentFrame" onclick="handleLinkClick()">聯絡我們</a></li>
+-->            
+        </ul>
 
-        <div class="legal-section">
-            <div class="section-title">法律與授權</div>
-            <ul>
-                <li><a href="pma-method/privacy-policy.html" target="contentFrame" onclick="handleLinkClick()">隱私權政策</a></li>
-                <li><a href="pma-method/original-statement.html" target="contentFrame" onclick="handleLinkClick()">原創權聲明</a></li>
-                <li><a href="pma-method/terms-of-use.html" target="contentFrame" onclick="handleLinkClick()">使用條款／免責聲明</a></li>
-            </ul>
-        </div>
-    </div>
+        <div class="legal-section">
+            <div class="section-title">法律與授權</div>
+            <ul>
+                <li><a href="pma-method/privacy-policy.html" target="contentFrame" onclick="handleLinkClick()">隱私權政策</a></li>
+                <li><a href="pma-method/original-statement.html" target="contentFrame" onclick="handleLinkClick()">原創權聲明</a></li>
+                <li><a href="pma-method/terms-of-use.html" target="contentFrame" onclick="handleLinkClick()">使用條款／免責聲明</a></li>
+            </ul>
+        </div>
+    </div>
 
-    <div class="content-area" id="contentArea">
-        <iframe name="contentFrame" id="contentFrame" src="pma-method/pma-home.html"></iframe>
-    </div>
+    <div class="content-area" id="contentArea">
+        <iframe name="contentFrame" id="contentFrame" src="pma-method/pma-home.html"></iframe>
+    </div>
 
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const contentFrame = document.getElementById('contentFrame');
-        const burgerMenu = document.getElementById('burgerMenu');
-        const contentArea = document.getElementById('contentArea');
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const contentFrame = document.getElementById('contentFrame');
+        const burgerMenu = document.getElementById('burgerMenu');
+        const contentArea = document.getElementById('contentArea');
 
-        // 新增的收合功能
-        const collapsibleTitles = document.querySelectorAll('.sidebar .section-title:not(.legal-section .section-title)');
-        collapsibleTitles.forEach(title => {
-            title.addEventListener('click', () => {
-                title.classList.toggle('active');
-            });
-        });
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            // 修正：當側邊欄開啟時，阻止 body 滾動，避免底部內容跳動
+            if (sidebar.classList.contains('active')) {
+                document.body.style.overflow = 'hidden'; 
+            } else {
+                // 只有在桌面版才允許 body 自動滾動，手機版由 iframe 自身滾動
+                if (window.innerWidth > 768) {
+                    document.body.style.overflow = 'auto'; 
+                } else {
+                    document.body.style.overflow = 'auto'; // 手機版仍然需要 body 滾動來顯示 footer 等
+                }
+            }
+        }
 
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            // 修正：當側邊欄開啟時，阻止 body 滾動，避免底部內容跳動
-            if (sidebar.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                // 只有在桌面版才允許 body 自動滾動，手機版由 iframe 自身滾動
-                if (window.innerWidth > 768) {
-                    document.body.style.overflow = 'auto';
-                } else {
-                    document.body.style.overflow = 'auto'; // 手機版仍然需要 body 滾動來顯示 footer 等
-                }
-            }
-        }
+        function handleLinkClick() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar(); // Close sidebar after clicking a link on mobile
+            }
+        }
 
-        function handleLinkClick() {
-            if (window.innerWidth <= 768) {
-                toggleSidebar(); // Close sidebar after clicking a link on mobile
-            }
-        }
+        // Set contentFrame height on load and resize - 這段JS邏輯其實很重要，保留
+        function setContentFrameHeight() {
+            if (window.innerWidth <= 768) {
+                const burgerMenuHeight = burgerMenu.offsetHeight;
+                // 手機版 contentArea 的高度：扣除 burger menu 的高度
+                contentArea.style.height = `calc(100vh - ${burgerMenuHeight}px)`;
+                contentArea.style.width = `100vw`; // 確保手機版 content-area 寬度為 100vw
+                // 確保 iframe 自己的高度也正確
+                contentFrame.style.height = `100%`; // 讓 iframe 佔滿 contentArea 的高度
+            } else {
+                contentArea.style.height = '100vh'; // 桌面版高度為 100vh
+                contentArea.style.width = `calc(100vw - ${sidebar.offsetWidth}px)`; // 桌面版寬度為 總寬度 - sidebar 寬度
+                contentFrame.style.height = `100%`; // 讓 iframe 佔滿 contentArea 的高度
+            }
+        }
 
-        // Set contentFrame height on load and resize - 這段JS邏輯其實很重要，保留
-        function setContentFrameHeight() {
-            if (window.innerWidth <= 768) {
-                const burgerMenuHeight = burgerMenu.offsetHeight;
-                // 手機版 contentArea 的高度：扣除 burger menu 的高度
-                contentArea.style.height = `calc(100vh - ${burgerMenuHeight}px)`;
-                contentArea.style.width = `100vw`; // 確保手機版 content-area 寬度為 100vw
-                // 確保 iframe 自己的高度也正確
-                contentFrame.style.height = `100%`; // 讓 iframe 佔滿 contentArea 的高度
-            } else {
-                contentArea.style.height = '100vh'; // 桌面版高度為 100vh
-                contentArea.style.width = `calc(100vw - ${sidebar.offsetWidth}px)`; // 桌面版寬度為 總寬度 - sidebar 寬度
-                contentFrame.style.height = `100%`; // 讓 iframe 佔滿 contentArea 的高度
-            }
-        }
+        document.addEventListener('DOMContentLoaded', setContentFrameHeight);
+        window.addEventListener('resize', setContentFrameHeight);
 
-        document.addEventListener('DOMContentLoaded', setContentFrameHeight);
-        window.addEventListener('resize', setContentFrameHeight);
-
-        // Optional: Reset iframe scroll to top when new content loads
-        contentFrame.onload = () => {
-             contentFrame.contentWindow.scrollTo(0, 0);
-        };
-    </script>
+        // Optional: Reset iframe scroll to top when new content loads
+        contentFrame.onload = () => {
+             contentFrame.contentWindow.scrollTo(0, 0);
+        };
+    </script>
 </body>
 </html>
